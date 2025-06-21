@@ -8,6 +8,17 @@ let Calculator = {
   progress: 0, // 0: entering num1, 1: operator selected, 2: result
 }
 
+function updateEquation() {
+  Calculator.equation = "";
+  Calculator.equation = (Calculator.equation).concat(
+    Calculator.num1
+    , Calculator.operator
+    , Calculator.num2
+    , () => {
+      return (Calculator.result) ? Calculator.result : "" ;
+    });
+}
+
 const display = document.querySelector("#display");
 function updateDisplay() {
   display.textContent = equation;
@@ -76,7 +87,7 @@ function inputOperator(value) {
 }
 
 function inputOption(value) {
-  switch(value) {
+  switch (value) {
     case ("ac"):
       resetCalculator();
       break;
