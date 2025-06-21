@@ -10,18 +10,17 @@ let Calculator = {
 
 function updateEquation() {
   Calculator.equation = "";
-  Calculator.equation = (Calculator.equation).concat(
-    Calculator.num1
-    , Calculator.operator
-    , Calculator.num2
-    , () => {
-      return (Calculator.result) ? Calculator.result : "";
-    });
+  Calculator.equation = `${Calculator.num1}${Calculator.operator}${Calculator.num2}`;
+
+  if (Calculator.result != null) {
+    Calculator.equation = (Calculator.equation).concat("=", (Calculator.result).toString());
+  }
 }
 
 const display = document.querySelector("#display");
 function updateDisplay() {
-  display.textContent = equation;
+  console.log(Calculator.equation);
+  display.textContent = Calculator.equation;
 }
 
 function resetCalculator() {
@@ -52,6 +51,7 @@ function clear() {
       } else {
         // Clear operator
         Calculator.operator = "";
+        Calculator.progress = 0;
       }
     }
   }
@@ -60,7 +60,6 @@ function clear() {
   // next operation 
   if (Calculator.progress == 2) {
     resetCalculator();
-    Calculator.num1 = trimLastDigit(Calculator.result);
   }
 }
 
@@ -69,6 +68,10 @@ function parseOperands() {
   Calculator.num2 = parseFloat(Calculator.num2);
 }
 
+function unParseOperands() {
+  Calculator.num1 = (Calculator.num1).toString();
+  Calculator.num2 = (Calculator.num2).toString();
+}
 function formatResult() {
   let tempResult = Calculator.result;
   Calculator.result = Number.isInteger(tempResult)
@@ -77,30 +80,86 @@ function formatResult() {
 }
 
 function add() {
-  return num1 + num2;
+  return Calculator.num1 + Calculator.num2;
 }
 
 function subtract() {
-  return num1 - num2;
+  return Calculator.num1 - Calculator.num2;
 }
 
 function multiply() {
-  return num1 * num2;
+  return Calculator.num1 * Calculator.num2;
 }
 
 function divide() {
-  return num1 / num2;
+  return Calculator.num1 / Calculator.num2;
 }
 
 function remainder() {
-  return num1 % num2;
+  return Calculator.num1 % Calculator.num2;
+}
+
+function operate() {
+  if (Calculator.progress >=2) {
+    return;
+  }
+  if (Calculator.num1 == "" || Calculator.operator == "" || Calculator.num2 == "") {
+    alert("Invalid Equation! Try again.");
+    return;
+  }
+
+  parseOperands();
+  let tempResult;
+  switch (Calculator.operator) {
+    case "+":
+      tempResult = add();
+      break;
+    case "-":
+      tempResult = subtract();
+      break;
+    case "*":
+      tempResult = multiply();
+      break;
+    case "/":
+      if (Calculator.num2 == 0) {
+        alert(
+          "WTH bro!!! 🤨 You trying to crash the app!!??"
+          + "\n You wont get the answer to this equation here"
+          + "\n You'll find it within..."
+        );
+        unParseOperands();
+        return;
+      } else {
+        tempResult = divide();
+      }
+      break;
+    case "%":
+      tempResult = remainder();
+      break;
+
+    default:
+      alert("Invalid Operator! Please select a valid operator.");
+      resetCalculator();
+      return;
+  }
+  unParseOperands();
+  Calculator.result = tempResult;
+  Calculator.progress += 1;
 }
 
 function inputOperand(value) {
-  if (value = ".") {
-    if (num1.contains(".") || (num2.contains("."))) {
-      alert("Invalid Input! Only 1 decimal seperator can be in a number.");
-      return;
+  if (value == ".") {
+    if (Calculator.progress == 0) {
+      if (Calculator.num1.includes(".")) {
+        alert("Invalid Input! Only 1 decimal seperator('.') can be in a number.");
+        return;
+      }
+    }
+    if (Calculator.progress == 1) {
+      if (Calculator.num2.includes(".")) {
+        alert("Invalid Input! Only 1 decimal seperator('.') can be in a number.");
+        return;
+      }
     }
   }
   if (Calculator.progress == 0) {
@@ -108,16 +167,38 @@ function inputOperand(value) {
   } else if (Calculator.progress == 1) {
     Calculator.num2 = (Calculator.num2).concat(value);
   } else if (Calculator.progress == 2) {    // Take any operand after showing the result as the first operand for the next operation
+    let tempNum1 = "";
+    let tempOperator = "";
+    if ((Calculator.secondOperator) != "") {
+      tempNum1 = (Calculator.result).toString();
+      tempOperator = Calculator.secondOperator;
+    }
     resetCalculator();
-    Calculator.num1 = (Calculator.num1).concat(value);
+    if (tempOperator != "") {
+      tempNum1 = tempNum1.concat(value);
+      Calculator.num1 = tempNum1;
+      Calculator.operator = tempOperator;
+      Calculator.num2 = value;
+      Calculator.progress = 1;
+    } else {
+      Calculator.num1 = tempNum1.concat(value);
+      console.log(Calculator);
+    }
   }
 }
 
 function inputOperator(value) {
   if (Calculator.progress == 0) {
     Calculator.operator = value;
+    Calculator.progress += 1;
   } else if (Calculator.progress == 1) {
     Calculator.secondOperator = value;
+  } else if (Calculator.progress == 2) {
+    let tempNum1 = (Calculator.result).toString();
+    resetCalculator();
+    Calculator.num1 = tempNum1;
+    Calculator.operator = value;
+    Calculator.progress = 1;
   }
 }
 
@@ -139,8 +220,8 @@ function inputOption(value) {
 }
 
 function handleInput(triggeredBtn) {
-  if (!buttonsContainer.matches('button')) return;   // Handle exceptional case where input isn't a button
-  const inputType = triggeredBtn.dataset.value;
+  // if (!buttonsContainer.matches('button')) return;   // Handle exceptional case where input isn't a button
+  const inputType = triggeredBtn.dataset.type;
   const value = triggeredBtn.value;
   if (inputType == "operand") {
     inputOperand(value);
@@ -153,7 +234,7 @@ function handleInput(triggeredBtn) {
   updateDisplay();
 }
 
-const buttonsContainer = document.querySelector("buttons-container");
+const buttonsContainer = document.querySelector(".buttons-container");
 buttonsContainer.addEventListener('click', (e) => {
   const triggeredBtn = e.target;
   handleInput(triggeredBtn);
