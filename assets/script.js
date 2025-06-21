@@ -51,6 +51,14 @@ function inputOperand(value) {
   }
 }
 
+function inputOperator(value) {
+  if (Calculator.progress == 0) {
+    Calculator.operator = value;
+  } else if (Calculator.progress == 1) {
+    Calculator.secondOperator = value;
+  } 
+}
+
 function handleInput(triggeredBtn) {
   if (!buttonsContainer.matches('button')) return;   // Handle exceptional case where input isn't a button
   const inputType = triggeredBtn.dataset.value;
