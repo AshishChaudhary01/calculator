@@ -51,19 +51,19 @@ function add() {
 }
 
 function subtract() {
-  returnnum1 - num2;
+  return num1 - num2;
 }
 
 function multiply() {
-  returnnum1 * num2;
+  return num1 * num2;
 }
 
 function divide() {
-  returnnum1 / num2;
+  return num1 / num2;
 }
 
 function remainder() {
-  returnnum1 % num2;
+  return num1 % num2;
 }
 
 function inputOperand(value) {
