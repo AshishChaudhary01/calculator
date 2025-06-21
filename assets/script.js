@@ -72,7 +72,26 @@ function inputOperator(value) {
     Calculator.operator = value;
   } else if (Calculator.progress == 1) {
     Calculator.secondOperator = value;
-  } 
+  }
+}
+
+function inputOption(value) {
+  switch(value) {
+    case ("ac"):
+      resetCalculator();
+      break;
+    case ("c"):
+      clear();
+      break;
+    case ("="):
+      operate();
+      break;
+    default:
+      alert("Invalid option!");
+      break;
+  }
+  updateEquation();
+  updateDisplay();
 }
 
 function handleInput(triggeredBtn) {
