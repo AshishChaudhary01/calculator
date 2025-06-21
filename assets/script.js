@@ -15,7 +15,7 @@ function updateEquation() {
     , Calculator.operator
     , Calculator.num2
     , () => {
-      return (Calculator.result) ? Calculator.result : "" ;
+      return (Calculator.result) ? Calculator.result : "";
     });
 }
 
@@ -32,6 +32,36 @@ function resetCalculator() {
   Calculator.result = null;
   Calculator.equation = "";
   Calculator.progress = 0;
+}
+
+function clear() {
+  if (Calculator.progress == 0) {
+    if (Calculator.num1 != "") {
+      // Clear last character of num1
+      Calculator.num1 = (Calculator.num1).slice(0, -1);
+    }
+  }
+  if (Calculator.progress == 1) {
+    if (Calculator.num2 != "") {
+      // Clear last character of num2
+      Calculator.num2 = (Calculator.num2).slice(0, -1);
+    } else {
+      if (Calculator.secondOperator != "") {
+        // Clear Second operator if present
+        Calculator.secondOperator = "";
+      } else {
+        // Clear operator
+        Calculator.operator = "";
+      }
+    }
+  }
+
+  // Trim the last digit of the result and use it as the num1 for the 
+  // next operation 
+  if (Calculator.progress == 2) {
+    resetCalculator();
+    Calculator.num1 = trimLastDigit(Calculator.result);
+  }
 }
 
 function parseOperands() {
