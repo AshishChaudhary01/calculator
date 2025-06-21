@@ -20,6 +20,18 @@ function handleInput(triggeredBtn) {
   }
 }
 
+function parseOperands() {
+  Calculator.num1 = parseFloat(Calculator.num1);
+  Calculator.num2 = parseFloat(Calculator.num2);
+}
+
+function formatResult() {
+  let tempResult = Calculator.result;
+  Calculator.result = Number.isInteger(tempResult)
+    ? tempResult
+    : tempResult.toFixed(2);    // Keep only the 2 digits after the decimal
+}
+
 function add() {
   return num1 + num2;
 }
