@@ -39,6 +39,17 @@ function remainder() {
   returnnum1 % num2;
 }
 
+function inputOperand(value) {
+  if (Calculator.progress == 0) {
+    Calculator.num1 = (Calculator.num1).concat(value);
+  } else if (Calculator.progress == 1) {
+    Calculator.num2 = (Calculator.num2).concat(value);
+  } else if (Calculator.progress == 2) {    // Take any operand after showing the result as the first operand for the next operation
+    resetCalculator();
+    Calculator.num1 = (Calculator.num1).concat(value);
+  }
+}
+
 function handleInput(triggeredBtn) {
   if (!buttonsContainer.matches('button')) return;   // Handle exceptional case where input isn't a button
   const inputType = triggeredBtn.dataset.value;
