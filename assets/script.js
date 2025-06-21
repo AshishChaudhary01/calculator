@@ -134,7 +134,17 @@ function operate() {
       }
       break;
     case "%":
-      tempResult = remainder();
+      if (Calculator.num2 == 0) {
+        alert(
+          "WTH bro!!! 🤨 You trying to crash the app!!??"
+          + "\n You wont get the answer to this equation here"
+          + "\n You'll find it within..."
+        );
+        unParseOperands();
+        return;
+      } else {
+        tempResult = remainder();
+      }
       break;
 
     default:
