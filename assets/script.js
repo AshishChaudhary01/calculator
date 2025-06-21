@@ -13,6 +13,17 @@ function updateDisplay() {
   display.textContent = equation;
 }
 
+function resetCalculator() {
+  Calculator.num1 = "";
+  Calculator.num2 = "";
+  Calculator.operator = "";
+  Calculator.secondOperator = "";
+  Calculator.result = null;
+  Calculator.equation = "";
+  Calculator.progress = 0;
+  updateDisplay();
+}
+
 function parseOperands() {
   Calculator.num1 = parseFloat(Calculator.num1);
   Calculator.num2 = parseFloat(Calculator.num2);
