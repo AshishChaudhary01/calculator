@@ -97,6 +97,12 @@ function remainder() {
 }
 
 function inputOperand(value) {
+  if (value = ".") {
+    if (num1.contains(".") || (num2.contains("."))) {
+      alert("Invalid Input! Only 1 decimal seperator can be in a number.");
+      return;
+    }
+  }
   if (Calculator.progress == 0) {
     Calculator.num1 = (Calculator.num1).concat(value);
   } else if (Calculator.progress == 1) {
