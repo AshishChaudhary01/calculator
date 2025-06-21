@@ -32,7 +32,6 @@ function resetCalculator() {
   Calculator.result = null;
   Calculator.equation = "";
   Calculator.progress = 0;
-  updateDisplay();
 }
 
 function parseOperands() {
@@ -101,8 +100,6 @@ function inputOption(value) {
       alert("Invalid option!");
       break;
   }
-  updateEquation();
-  updateDisplay();
 }
 
 function handleInput(triggeredBtn) {
@@ -116,6 +113,8 @@ function handleInput(triggeredBtn) {
   } else if (inputType == "option") {
     inputOption(value);
   }
+  updateEquation();
+  updateDisplay();
 }
 
 const buttonsContainer = document.querySelector("buttons-container");
