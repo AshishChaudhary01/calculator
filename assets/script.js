@@ -8,6 +8,11 @@ let Calculator = {
   progress: 0, // 0: entering num1, 1: operator selected, 2: result
 }
 
+const display = document.querySelector("#display");
+function updateDisplay() {
+  display.textContent = equation;
+}
+
 function parseOperands() {
   Calculator.num1 = parseFloat(Calculator.num1);
   Calculator.num2 = parseFloat(Calculator.num2);
